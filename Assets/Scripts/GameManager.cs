@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -21,11 +22,20 @@ public class GameManager : Singleton<GameManager>
     public GameObject inGameUI;
     public GameObject pausedUI;
     public GameObject gameOverUI;
+    public GameObject victoryUI;
     public GameObject mainMenuUI;
+    public GameObject optionsUi;
+
+    public Button inversionShipButton;
+
+    public StationIndicator stationHealthbar;
+
+    private int inversionIndicator = -1;
+
     // Игра находится в состоянии проигрывания?
     public bool gameIsPlaying { get; private set; }
     // Система создания астероидов
-    public AsteroidSpawner asteroidSpawner;
+    public EnemiesSpawner enemiesSpawner;
     // Признак приостановки игры.
     public bool paused;
     // Отображает главное меню в момент запуска игры
@@ -48,7 +58,7 @@ public class GameManager : Singleton<GameManager>
     {
         // Создать список всех контейнеров.
         GameObject[] allUI
-        = { inGameUI, pausedUI, gameOverUI, mainMenuUI };
+        = { inGameUI, pausedUI, gameOverUI, victoryUI, mainMenuUI, optionsUi };
         // Скрыть их все.
         foreach (GameObject UIToHide in allUI)
         {
@@ -64,13 +74,16 @@ public class GameManager : Singleton<GameManager>
         // Когда игра запускается, она находится не в состоянии проигрывания
         gameIsPlaying = false;
         // Запретить создавать астероиды
-        asteroidSpawner.spawnAsteroids = false;
+        enemiesSpawner.SwitchAllSpawnerProcesses(false);
     }
     // Вызывается в ответ на касание кнопки New Game
     public void StartGame()
     {
+        dieEnemiesCount = enemiesSpawner.allAssaultCount + enemiesSpawner.allRamCount;
         currentDieEnemiesCount = 0;
 
+        enemiesSpawner.currentAllAssaultCount = 0;
+        enemiesSpawner.currentAllRamCount = 0;
         // Вывести интерфейс игры
         ShowUI(inGameUI);
         // Перейти в режим игры
@@ -94,27 +107,35 @@ public class GameManager : Singleton<GameManager>
         = shipStartPosition.position;
         currentShip.transform.rotation
         = shipStartPosition.rotation;
+        currentShip.GetComponent<ShipSteering>().inversionIndicator = inversionIndicator;
+
         // То же для станции
         currentSpaceStation = Instantiate(spaceStationPrefab);
         currentSpaceStation.transform.position =
         spaceStationStartPosition.position;
         currentSpaceStation.transform.rotation =
         spaceStationStartPosition.rotation;
+
+        stationHealthbar.spaceStation = currentSpaceStation.GetComponent<DamageTaking>();
+        stationHealthbar.basicHealth = currentSpaceStation.GetComponent<DamageTaking>().hitPoints;
         // Передать сценарию управления камерой ссылку на
         // новый корабль, за которым она должна следовать
         cameraFollow.target = currentShip.transform;
-        
+
         // Начать создавать астероиды
-        asteroidSpawner.spawnAsteroids = true;
+        enemiesSpawner.SwitchAllSpawnerProcesses(true);
+       // enemiesSpawner.spawnAssaultShip = true;
         // Сообщить системе создания астероидов
         // позицию новой станции
-        asteroidSpawner.target = currentSpaceStation.transform;
+        enemiesSpawner.target = currentSpaceStation.transform;
     }
     // Вызывается объектами, завершающими игру при разрушении
+    
     public void GameOver()
     {
         // Показать меню завершения игры
         ShowUI(gameOverUI);
+        inversionIndicator = currentShip.GetComponent<ShipSteering>().inversionIndicator;
         // Выйти из режима игры
         gameIsPlaying = false;
         // Удалить корабль и станцию
@@ -125,9 +146,42 @@ public class GameManager : Singleton<GameManager>
 
         warningUI.SetActive(false);
         // Прекратить создавать астероиды
-        asteroidSpawner.spawnAsteroids = false;
+        enemiesSpawner.SwitchAllSpawnerProcesses(false);
+        //enemiesSpawner.spawnAssaultShip = false;
         // и удалить все уже созданные астероиды
-        asteroidSpawner.DestroyAllAsteroids();
+        enemiesSpawner.DestroyAllEnemies();
+
+        //asteroidSpawner.currentAllAsteroids = 0;
+    }
+
+    public void Back()
+    {
+        ShowUI(pausedUI);
+    }
+
+    public void Options()
+    {
+        ShowUI(optionsUi);
+    }
+    public void Victory()
+    {
+        // Показать меню завершения игры
+        ShowUI(victoryUI);
+        inversionIndicator = currentShip.GetComponent<ShipSteering>().inversionIndicator;
+        // Выйти из режима игры
+        gameIsPlaying = false;
+        // Удалить корабль и станцию
+        if (currentShip != null)
+            Destroy(currentShip);
+        if (currentSpaceStation != null)
+            Destroy(currentSpaceStation);
+
+        warningUI.SetActive(false);
+        // Прекратить создавать астероиды
+        enemiesSpawner.SwitchAllSpawnerProcesses(false);
+        //enemiesSpawner.spawnAssaultShip = false;
+        // и удалить все уже созданные астероиды
+        enemiesSpawner.DestroyAllEnemies();
     }
     // Вызывается в ответ на касание кнопки Pause или Unpause
     public void SetPaused(bool paused)
@@ -152,9 +206,15 @@ public class GameManager : Singleton<GameManager>
     {
         currentDieEnemiesCount += 1;
     }
+
+    public void SwitchShipInversion()
+    {
+        currentShip.GetComponent<ShipSteering>().inversionButton = inversionShipButton;
+        currentShip.GetComponent<ShipSteering>().SwitchInversion();
+    }
     public void Update()
     {
-
+        stationHealthbar.spaceStation = currentSpaceStation.GetComponent<DamageTaking>();
         // Если корабля нет, выйти
         if (currentShip == null)
             return;
@@ -162,7 +222,7 @@ public class GameManager : Singleton<GameManager>
 
         if (currentDieEnemiesCount == dieEnemiesCount)
         {
-            GameOver();
+            Victory();
         }
 
         if (distance > boundary.destroyRadius)
@@ -179,4 +239,6 @@ public class GameManager : Singleton<GameManager>
             warningUI.SetActive(false);
         }
     }
+
+
 }

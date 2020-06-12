@@ -1,13 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ShipSteering : MonoBehaviour
 {
+
+    public Button inversionButton;
     // Скорость поворота корабля
     public float turnRate = 6.0f;
     // Сила выравнивания корабля
     public float levelDamping = 1.0f;
+
+    public int inversionIndicator = -1;
     void Update()
     {
         // Создать новый поворот, умножив вектор направления джойстика
@@ -18,7 +23,7 @@ public class ShipSteering : MonoBehaviour
         // Теперь создать вектор для вычисления поворота.
         var rotation = new Vector2();
         rotation.y = steeringInput.x;
-        rotation.x = -steeringInput.y;
+        rotation.x = steeringInput.y*inversionIndicator;
         // Умножить на turnRate, чтобы получить величину поворота.
         rotation *= turnRate;
         // Преобразовать в радианы, умножив на 90 %
@@ -44,4 +49,26 @@ public class ShipSteering : MonoBehaviour
         transform.rotation, levelOrientation,
         levelDamping * Time.deltaTime);
     }
+
+    public void SwitchInversion()
+    {
+        if(inversionIndicator == -1)
+        {
+            //inversionButton.interactable = false;
+            inversionButton.image.color = Color.green;
+            inversionIndicator = 1;
+        }
+        else
+        {
+            inversionButton.image.color = Color.white;
+            //inversionButton.interactable = true;
+            inversionIndicator = -1;
+        }
+
+    }
+
+    /*private void OnDestroy()
+    {
+        inversionButton.image.color = Color.white;
+    }*/
 }

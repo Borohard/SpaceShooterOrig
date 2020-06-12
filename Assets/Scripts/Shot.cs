@@ -12,13 +12,21 @@ public class Shot : MonoBehaviour
     public float life = 5.0f;
     void Start()
     {
+        Invoke("RadiusUpScale", 0.2f);
         // Уничтожить через 'life' секунд
         Destroy(gameObject, life);
+
     }
     void Update()
     {
+        
         // Перемещать вперед с постоянной скоростью
         transform.Translate(
         Vector3.forward * speed * Time.deltaTime);
+    }
+
+    void RadiusUpScale()
+    {
+        GetComponent<SphereCollider>().radius = 0.5f;
     }
 }

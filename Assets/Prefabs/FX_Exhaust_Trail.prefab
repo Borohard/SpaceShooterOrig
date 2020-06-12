@@ -4621,7 +4621,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitPoints: 1
-  destructionPrefab: {fileID: 0}
+  destructionPrefab: {fileID: 155508, guid: ecf652895fd9d4123b81d99ffc3a4e73, type: 3}
   gameOverOnDestroyed: 0
 --- !u!114 &448617250409778441
 MonoBehaviour:
@@ -4649,5 +4649,5 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.5
+  m_Radius: 0.00001
   m_Center: {x: 0, y: 0, z: 0}

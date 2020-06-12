@@ -13,7 +13,7 @@ public class Asteroid : MonoBehaviour
         = transform.forward * speed;
         // Создать красный индикатор для данного астероида
         var indicator = IndicatorManager.instance
-        .AddIndicator(gameObject, Color.red);
+        .AddIndicator(gameObject, Color.Lerp(Color.red,Color.blue, 0.3f));
 
         indicator.showDistanceTo = GameManager.instance.currentSpaceStation.transform;
     }

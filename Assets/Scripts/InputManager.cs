@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class InputManager : Singleton<InputManager>
@@ -88,7 +87,27 @@ public class InputManager : Singleton<InputManager>
             // следующим выстрелом
             yield return new WaitForSeconds(fireRate);
 
+            /*if (isFiring == false)
+            {
+                fireButton.GetComponent<Button>().enabled = false;
+                fireButton.GetComponent<Button>().interactable=false;
+                fireButton.GetComponent<EventTrigger>().enabled = false;
+                yield return new WaitForSecondsRealtime(1.0f);
+                fireButton.GetComponent<EventTrigger>().enabled = true;
+                fireButton.GetComponent<Button>().enabled = true;
+                fireButton.GetComponent<Button>().interactable = true;
+                Debug.Log("cooldown");
+            }*/
         }
+
+        /*if (isFiring == false)
+        {
+            fireButton.SetActive(false);
+            yield return new WaitForSecondsRealtime(1.0f);
+            fireButton.SetActive(true);
+            Debug.Log("cooldown");
+        }*/
+
 
     } 
 
@@ -98,17 +117,27 @@ public class InputManager : Singleton<InputManager>
         // Присвоить false, чтобы завершить цикл в
         // FireWeapons
         isFiring = false;
-        StartCoroutine(buttonCoolDown());
-        
-        
+        Debug.Log("cooldown");
+        StartCoroutine(ButtonCoolDown());
+        StopCoroutine(ButtonCoolDown());
+
 
     }
 
-    IEnumerator buttonCoolDown()
+    IEnumerator ButtonCoolDown()
     {
-        fireButton.SetActive(false);
-        yield return new WaitForSecondsRealtime(1.0f);
-        fireButton.SetActive(true);
+        
+        
+            fireButton.GetComponent<Button>().enabled = false;
+            //fireButton.GetComponent<Button>().interactable = false;
+            fireButton.GetComponent<EventTrigger>().enabled = false;
+            yield return new WaitForSecondsRealtime(1.0f);
+            fireButton.GetComponent<EventTrigger>().enabled = true;
+            fireButton.GetComponent<Button>().enabled = true;
+            //fireButton.GetComponent<Button>().interactable = true;
+            Debug.Log("cooldown");
+        
+        
     }
 
 

@@ -1,11 +1,12 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - AssaultShip
     - Asteroid
-    - AsteroidSpawner
     - Boundary
     - DamageOnCollide
     - DamageTaking
+    - EnemiesSpawner
     - GameManager
     - Indicator
     - IndicatorManager
@@ -17,6 +18,7 @@ ScriptsOnlyBuild:
     - Shot
     - SmoothFollow
     - SpaceStation
+    - StationIndicator
     - VirtualJoystick
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
@@ -95,42 +97,44 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 10256}
     - Class: 114
-      Script: {instanceID: 10332}
+      Script: {instanceID: 10274}
     - Class: 114
-      Script: {instanceID: 10494}
+      Script: {instanceID: 10334}
     - Class: 114
-      Script: {instanceID: 10606}
+      Script: {instanceID: 10496}
     - Class: 114
-      Script: {instanceID: 10684}
+      Script: {instanceID: 10608}
     - Class: 114
-      Script: {instanceID: 10776}
+      Script: {instanceID: 10686}
     - Class: 114
-      Script: {instanceID: 10932}
+      Script: {instanceID: 10778}
     - Class: 114
-      Script: {instanceID: 10984}
+      Script: {instanceID: 10934}
     - Class: 114
       Script: {instanceID: 10986}
     - Class: 114
-      Script: {instanceID: 11074}
+      Script: {instanceID: 10988}
     - Class: 114
-      Script: {instanceID: 11172}
+      Script: {instanceID: 11076}
     - Class: 114
-      Script: {instanceID: 11266}
+      Script: {instanceID: 11174}
     - Class: 114
-      Script: {instanceID: 11400}
+      Script: {instanceID: 11268}
     - Class: 114
-      Script: {instanceID: 11424}
+      Script: {instanceID: 11402}
     - Class: 114
-      Script: {instanceID: 11434}
+      Script: {instanceID: 11426}
     - Class: 114
       Script: {instanceID: 11436}
+    - Class: 114
+      Script: {instanceID: 11438}
+    - Class: 114
+      Script: {instanceID: 21190}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
       Script: {instanceID: 0}
     - Class: 135
-      Script: {instanceID: 0}
-    - Class: 136
       Script: {instanceID: 0}
     - Class: 157
       Script: {instanceID: 0}
@@ -163,10 +167,10 @@ ScriptsOnlyBuild:
     className: TMP_SelectionCaret
   - hash:
       serializedVersion: 2
-      Hash: e95376b93c12c3e39422ef88d4f5e12d
+      Hash: 399194b1c0c56e644610b287f0262161
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
-    className: AsteroidSpawner
+    className: EnemiesSpawner
   - hash:
       serializedVersion: 2
       Hash: 87ff43d2baf3385cba327d8f803a4ebb
@@ -355,6 +359,12 @@ ScriptsOnlyBuild:
     className: ControlPlayableAsset
   - hash:
       serializedVersion: 2
+      Hash: 0d491c6db5bf849db563c974d4505d1f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: AssaultShip
+  - hash:
+      serializedVersion: 2
       Hash: b8a5e8091ab0b8861d2add371082c5e0
     assemblyName: Unity.TextMeshPro.dll
     namespaceName: TMPro
@@ -499,7 +509,7 @@ ScriptsOnlyBuild:
     className: TimelineAsset
   - hash:
       serializedVersion: 2
-      Hash: a3aacf80a69ac33cf411cdf01ffade6e
+      Hash: b2d5f15fbf8aa5414e822b278ded7aea
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: ShipSteering
@@ -631,7 +641,7 @@ ScriptsOnlyBuild:
     className: DamageTaking
   - hash:
       serializedVersion: 2
-      Hash: 568ad9964a65b9aab53742f4a23d709a
+      Hash: a78f611190e60eed9f1e2792915a7969
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameManager
@@ -671,6 +681,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: PlayableTrack
+  - hash:
+      serializedVersion: 2
+      Hash: 0563cab3e484268cf71f69bbac789221
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: StationIndicator
   platform: 13
   scenePathNames:
   - Assets/Main.scene.unity
